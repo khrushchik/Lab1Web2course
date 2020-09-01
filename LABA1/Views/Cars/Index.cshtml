@@ -1,0 +1,197 @@
+﻿@model IEnumerable<LABA1.Cars>
+
+@{
+    ViewData["Title"] = "Автомобили";
+}
+
+<h1>Автомобили</h1>
+<p>
+    @if (ViewContext.HttpContext.User.IsInRole("admin"))
+    {
+        <form asp-action="Create">
+            <input class="btn-primary" type="submit" value="Добавить" />
+        </form>
+    }
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewBag.GovNumberSort">
+                    Гос номер
+                </a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewBag.PriceSort">
+                    Цена
+                </a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewBag.YearSort">
+                    Год
+                </a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewBag.BodySort">
+                    Кузов
+                </a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewBag.ColorSort">
+                    Цвет
+                </a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewBag.LabelSort">
+                    Марка
+                </a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewBag.LandlordSort">
+                    Арендодатель
+                </a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewBag.TransmissionSort">
+                    Коробка передач
+                </a>
+            </th>
+        </tr>
+
+    </thead>
+    <tbody>
+        @foreach (Cars u in Model)
+        {
+            <tr>
+                <td>@u.GovNumber</td>
+                <td>@u.Price</td>
+                <td>@u.Year</td>
+                <td>@u.Body.Body</td>
+                <td>@u.Color.Color</td>
+                <td>@u.Label.Lable</td>
+                <td>@u.Landlord.Name</td>
+                <td>@u.Transmission.Trasmission</td>
+                <td>
+                    @if (ViewContext.HttpContext.User.IsInRole("admin"))
+                    {
+                        <a asp-action="Edit" asp-route-id="@u.Id">Редактировать</a>
+                        <a asp-action="Delete" asp-route-id="@u.Id">Удалить</a>
+                    }
+                </td>
+
+            </tr>
+        }
+    </tbody>
+
+</table>
+
+
+
+@*<thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Year)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Price)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.GovNumber)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Body)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Color)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Label)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Landlord)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Transmission)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+    @foreach (var item in Model) {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Year)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Price)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.GovNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Body.Body)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Color.Color)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Label.Lable)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Landlord.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Transmission.Trasmission)
+                </td>
+                <td>
+                    @if (ViewContext.HttpContext.User.IsInRole("admin"))
+                    {
+                        <a asp-action="Edit" asp-route-id="@item.Id">Редактировать</a>
+                        <a asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
+                    }
+                </td>
+            </tr>
+    }
+        </tbody>*@
+<a id="toggleLink" href="javascript:void(0);" onclick="viewdiv('chart2');" data-text-show="Спрятать диаграмму" data-text-hide="Показать диаграмму">Показать диаграмму</a>
+<div id="chart2" style="display:none;"></div>
+
+<script>
+    function viewdiv(id) {
+        var el = document.getElementById(id);
+        var link = document.getElementById('toggleLink');
+        if (el.style.display == "block") {
+            el.style.display = "none";
+            link.innerText = link.getAttribute('data-text-hide');
+        } else {
+            el.style.display = "block";
+            link.innerText = link.getAttribute('data-text-show');
+        }
+    }
+
+</script>
+<div class="container">
+    <div id="chart2"></div>
+</div>
+@section scripts{
+    <script type="text/javascript" src="https://gstatic.com/charts/loader.js"></script>
+
+    <script>
+        google.charts.load('current', { 'packages': ['corechart'] });
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+            $.get('/api/Charts/JsonData1', function (jsonData1) {
+                data = google.visualization.arrayToDataTable(jsonData1, false);
+                var option = {
+                    title: "Соотношение автомобилей с разными коробками передач",
+                    width: 500,
+                    height: 400
+                };
+                chart = new google.visualization.PieChart(document.getElementById('chart2'));
+                chart.draw(data, option);
+            })
+        }
+    </script>
+}
+<img style="position: absolute; bottom:30px;right:15px; " src="~/css/fon.png" border="0" width=400px; />

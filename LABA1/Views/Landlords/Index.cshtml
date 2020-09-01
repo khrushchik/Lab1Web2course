@@ -1,0 +1,168 @@
+﻿@model IEnumerable<LABA1.Landlords>
+
+@{
+    ViewData["Title"] = "Арендодатели";
+}
+
+<h1>Арендодатели</h1>
+
+<p>
+    @if (ViewContext.HttpContext.User.IsInRole("admin"))
+    {
+        <form asp-action="Create">
+            <input class="btn-primary" type="submit" value="Добавить" />
+        </form>
+    }
+</p>
+@*<div>
+    <h3>Выберите exel-файл для загрузки</h3>
+    @using (Html.BeginForm("Import", "Landlords", FormMethod.Post, new { enctype = "multipart/form-data", id = "frm-excel" }))
+    {
+        <div>
+            Загрузите Excel-файл:
+            <input type="file" name="fileExcel" id="fileExcel" />
+            <div>
+                <input class="btn-primary" type="submit" value="Загрузить" />
+            </div>
+        </div>
+    }
+</div>
+<div>
+    <h3>Загрузка информации в файл</h3>
+    <form asp-action="Export">
+        <input class="btn-primary" type="submit" value="Загрузить"
+    </form>
+</div>*@
+
+<table class="table">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    <a asp-action="Index" asp-route-sortOrder="@ViewBag.NameSort">
+                        Название
+                    </a>
+                </th>
+                <th>
+                    <a asp-action="Index" asp-route-sortOrder="@ViewBag.CountrySort">
+                        Страна
+                    </a>
+                </th>
+                <th>
+                    <a asp-action="Index" asp-route-sortOrder="@ViewBag.ContactPersonSort">
+                        Контактное лицо
+                    </a>
+                </th>
+                <th>
+                    <a asp-action="Index" asp-route-sortOrder="@ViewBag.PhoneSort">
+                        Телефон
+                    </a>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Landlords u in Model)
+            {
+                <tr>
+                    <td>@u.Name</td>
+                    <td>@u.Country.Country</td>
+                    <td>@u.ContartPerson</td>
+                    <td>@u.Phone</td>
+                    <td>
+                        @if (ViewContext.HttpContext.User.IsInRole("admin"))
+                        {
+                            <a asp-action="Edit" asp-route-id="@u.Id">Редактировать</a>
+                            <a asp-action="Delete" asp-route-id="@u.Id">Удалить</a>
+                        }
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+        @*<thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Name)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.ContartPerson)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Phone)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Country)
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+            @foreach (var item in Model) {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ContartPerson)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Phone)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Country.Country)
+                        </td>
+                        <td>
+                            @if (ViewContext.HttpContext.User.IsInRole("admin"))
+                            {
+                                <a asp-action="Edit" asp-route-id="@item.Id">Редактировать</a>
+                                <a asp-action="Details" asp-route-id="@item.Id">Details</a>
+                                <a asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
+                            }
+                        </td>
+                    </tr>
+            }
+                </tbody>*@
+    </table>
+    <a id="toggleLink" href="javascript:void(0);" onclick="viewdiv('chart1');" data-text-show="Спрятать диаграмму" data-text-hide="Показать диаграмму">Показать диаграмму</a>
+    <div id="chart1" style="display:none;"></div>
+
+    <script>
+        function viewdiv(id) {
+            var el = document.getElementById(id);
+            var link = document.getElementById('toggleLink');
+            if (el.style.display == "block") {
+                el.style.display = "none";
+                link.innerText = link.getAttribute('data-text-hide');
+            } else {
+                el.style.display = "block";
+                link.innerText = link.getAttribute('data-text-show');
+            }
+        }
+
+    </script>
+    <div class="container">
+        <div id="chart1"></div>
+    </div>
+    @section scripts{
+        <script type="text/javascript" src="https://gstatic.com/charts/loader.js"></script>
+
+        <script>
+            google.charts.load('current', { 'packages': ['corechart'] });
+            google.charts.setOnLoadCallback(drawChart);
+
+            function drawChart() {
+                $.get('/api/Charts/JsonData', function (jsonData) {
+                    data = google.visualization.arrayToDataTable(jsonData, false);
+                    var option = {
+                        title: "Соотношение количества автомобилей и арендодателей",
+                        width: 500,
+                        height: 400
+                    };
+                    chart = new google.visualization.PieChart(document.getElementById('chart1'));
+                    chart.draw(data, option);
+                })
+            }
+        </script>
+    }
+
+    <img style="position: absolute; bottom:30px;right:15px; " src="~/css/fon.png" border="0" width=400px; />

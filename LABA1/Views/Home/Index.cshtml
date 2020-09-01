@@ -1,0 +1,28 @@
+﻿@{
+    ViewData["Title"] = "Добро пожаловать";
+}
+
+<div class="text-center">
+    <h1 class="display-1">Добро пожаловать</h1>
+</div>
+@if (User.Identity.IsAuthenticated)
+{
+    <p>@User.Identity.Name</p>
+
+    <form method="post" asp-controller="Account" asp-action="Logout">
+        <input class="btn-primary" type="submit" value="Выход" />
+    </form>
+}
+else
+{
+    <a asp-controller="Account" asp-action="Login">Вход</a>
+    <a asp-controller="Account" asp-action="Register">Регистрация</a>
+}
+@if (ViewContext.HttpContext.User.IsInRole("admin"))
+{
+    <form asp-controller="Roles" asp-action="Index">
+        <input class="btn-primary" type="submit" value="Администрирование" />
+    </form>
+}
+<img src="~/css/cars.png" width="100%">
+

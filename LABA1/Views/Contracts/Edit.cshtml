@@ -1,0 +1,55 @@
+﻿@model LABA1.Contracts
+
+@{
+    ViewData["Title"] = "Редактирование";
+}
+
+<h1>Редактирование</h1>
+
+<h4>Контракт</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="RenterId" class="control-label"></label>
+                <select asp-for="RenterId" class="form-control" asp-items="ViewBag.RenterId"></select>
+                <span asp-validation-for="RenterId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CarId" class="control-label"></label>
+                <select asp-for="CarId" class="form-control" asp-items="ViewBag.CarId"></select>
+                <span asp-validation-for="CarId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="StartDate" class="control-label"></label>
+                <input asp-for="StartDate" class="form-control" />
+                <span asp-validation-for="StartDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DayNumber" class="control-label"></label>
+                <input asp-for="DayNumber" class="form-control" />
+                <span asp-validation-for="DayNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DayPrice" class="control-label"></label>
+                <input asp-for="DayPrice" class="form-control" />
+                <span asp-validation-for="DayPrice" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Сохранить" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Вернуться</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
+<img style="position: absolute; bottom:30px;right:15px; " src="~/css/fon.png" border="0" width=400px; />

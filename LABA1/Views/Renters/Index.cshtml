@@ -1,0 +1,135 @@
+﻿@model IEnumerable<LABA1.Renters>
+
+@{
+    ViewData["Title"] = "Арендаторы";
+}
+
+<h1>Арендаторы</h1>
+
+<p>
+    @if (ViewContext.HttpContext.User.IsInRole("admin"))
+    {
+        @*<a asp-action="Create">Добавить нового</a>*@
+        <form asp-action="Create">
+            <input class="btn-primary" type="submit" value="Добавить" />
+        </form>
+    }
+    <div>
+        <h3>Выберите exel-файл для загрузки</h3>
+        @using (Html.BeginForm("Import", "Renters", FormMethod.Post, new { enctype = "multipart/form-data", id = "frm-excel" }))
+        {
+            <div>
+                Загрузите Excel-файл:
+                <input type="file" name="fileExcel" id="fileExcel" />
+                <div>
+                    <input class="btn-primary" type="submit" value="Загрузить" />
+                </div>
+            </div>
+        }
+    </div>
+    <div>
+        <h3>Загрузка информации в файл</h3>
+        <form asp-action="Export">
+            <input class="btn-primary" type="submit" value="Загрузить"
+        </form>
+    </div>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewBag.PassportSort">
+                    Паспорт
+                </a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewBag.PhoneSort">
+                    Телефон
+                </a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewBag.DriveExpSort">
+                    Стаж вождения
+                </a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewBag.AdressSort">
+                    Адрес
+                </a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewBag.NameSort">
+                    ФИО
+                </a>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (Renters u in Model)
+        {
+            <tr>
+                <td>@u.Passport</td>
+                <td>@u.Phone</td>
+                <td>@u.DriveExperience</td>
+                <td>@u.Address</td>
+                <td>@u.Name</td>
+                <td>
+                    @if (ViewContext.HttpContext.User.IsInRole("admin"))
+                    {
+                        <a asp-action="Edit" asp-route-id="@u.Id">Редактировать</a>
+                        <a asp-action="Delete" asp-route-id="@u.Id">Удалить</a>
+                    }
+                </td>
+
+            </tr>
+        }
+    </tbody>
+    @*<thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Name)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Passport)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Phone)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.DriveExperience)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Address)
+                    </th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+        @foreach (var item in Model) {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Passport)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Phone)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DriveExperience)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Address)
+                    </td>
+                    <td>
+                        @if (ViewContext.HttpContext.User.IsInRole("admin"))
+                        {
+                            <a asp-action="Edit" asp-route-id="@item.Id">Редактировать</a>
+                            <a asp-action="Delete" asp-route-id="@item.Id">Удалить</a>
+                        }
+                    </td>
+                </tr>
+        }
+            </tbody>*@
+</table>

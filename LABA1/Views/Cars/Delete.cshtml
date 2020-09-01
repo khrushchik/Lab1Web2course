@@ -1,0 +1,70 @@
+﻿@model LABA1.Cars
+
+@{
+    ViewData["Title"] = "Удаление";
+}
+
+
+<h3>Вы уверены, что хотите удалить это?</h3>
+<div>
+    <h1>Удаление</h1>
+    <h4>Автомобиля</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Year)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Year)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Price)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Price)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.GovNumber)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.GovNumber)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Body)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Body.Body)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Color)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Color.Color)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Label)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Label.Lable)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Landlord)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Landlord.ContartPerson)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Transmission)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Transmission.Trasmission)
+        </dd>
+    </dl>
+
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="Id" />
+        <input type="submit" value="Удалить" class="btn btn-danger" /> |
+        <a asp-action="Index">Вернуться</a>
+    </form>
+</div>
+<img style="position: absolute; bottom:30px;right:15px; " src="~/css/fon.png" border="0" width=400px; />
